@@ -15,5 +15,4 @@ ConsentChecks.r -- auxiliary analysis of differences between visitors who did or
 06_AggBatDataWuv.csv,  GRTE lighting.xlsx, MooseWeatherHr.csv (yes, the Holy Grail reference was intentional), and MASTER_GRTE_NightSkies_Cleaned_NRB2.sav should be placed in the Data subdirectory.
 AsphaltReflectance.RDat, LightMeasurementsLong.csv, and Vb2BrightnessCoefficients.csv should be placed in the Radiometry subdirectory.
 
-Questions about the survey design and deployment should be directed to Prof. Peter Newman at Penn State University -- pbn3@psu.edu.
-This repository is maintained by Kurt Fristrup, who can be reached at Kurt.Fristrup@colostate.edu
+Questions about the survey design and deployment should be directed to Prof. B. Derrick Taff at Penn State University -- bdt3@psu.edu. This repository is maintained by Kurt Fristrup, Kurt.Fristrup@colostate.edu
