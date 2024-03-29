@@ -266,28 +266,27 @@ clustGramKf <- function (xmat, rmRows, Q1, Qparts, ansVals) {
   return(invisible(list(survOrder=colInd, varOrder=rowInd)))
 }
 complexPlot <- function(rmat, xCensor=NULL, scales=NULL, Quest, qVals, aVals){
-  # expects global odir for write.csv()
   if(is.null(xCensor))
      redMat <- rmat[, -match(c("Color", "N10city"), names(rmat))] else
        redMat <- rmat[!xCensor, -match(c("Color", "N10city"), names(rmat))]
   aispHrange <- seq(from=0.05, to=0.9, by=0.05)
   # AISP results exclude the censored data and any NA (via revCodeH)
-  redGps <- aisp(revCodeH(redMat)$Likert, lowerbound = aispHrange)
+  redAisp <- revCodeH(redMat)
+  redGps <- aisp(redAisp$Likert, lowerbound = aispHrange)
   redGps <- t(unique(t(redGps)))
   redGps <- redGps[,rev(dimnames(redGps)[[2]])]
   redGps <- redGps[,!apply(redGps==0, 2, all)]
-  write.csv(redGps, file=paste0(odir,
-                                sub(patt="_.*", repl="", names(redMat)[1]),
-                                "Aisp.csv"))
+  write.csv(redGps, file=here("Output", paste0(sub(patt="_.*", repl="",
+	names(redMat)[1]), "Aisp.csv")))
   if(is.null(scales)) return(redGps)
   # This section creates a table that is no longer plotted
   LH <- vector(mode="list",length=length(scales))
   ############# psych::alpha seems to throw warnings for 2-item scales
-  redMatr <- revCodeH(redMat)$Likert
+  redMatr <- redAisp$Likert
   for (sc in seq(along=scales)){
     tmp <- coefH(redMatr[,scales[[sc]]], se = T, results = F)
     LH[[sc]] <- tmp
-  } # get Loevinger's H and Coefficient Alpha
+  } # get Loevinger's H
   ##### create LoevH rows for complex figure
   lHrows <- sapply(sapply(unlist(lapply(LH,"[[", "H")),
                           gsub, patt="[)( ]", repl=""), as.numeric)
@@ -306,10 +305,8 @@ complexPlot <- function(rmat, xCensor=NULL, scales=NULL, Quest, qVals, aVals){
 # end of unused table
   ####### Create Streetlight compound figure
   kolr <- gray(seq(from=0, to=5, length.out=5)/5)
-#  CairoPNG(filename = paste0(odir,
-#                             sub(patt="_.*", repl="", names(redMat)[1]),
-#                             "Composite.png"),
-#           width=2800,height=1750)
+#  CairoPNG(filename = here("Output", paste0(sub(patt="_.*", repl="",
+#		names(redMat)[1]), "Composite.png")), width=2800,height=1750)
   hmRes <- clustGramKf(rmat, xCensor, Q1=Quest, Qparts = qVals, ansVals=aVals)
 #  dev.off()
   return(scls)
