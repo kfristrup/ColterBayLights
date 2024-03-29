@@ -12,9 +12,10 @@ chk2 <- as.data.frame(chk[grep("NRB", names(chk))])
 chk2[2:5] <- lapply(chk2[2:5], fact2logical)
 chk2 <- chk2[chk2$NRB_binary %in% c("REFUSAL", "AGREE"),]
 chk2$NRB_binary <- droplevels(chk2$NRB_binary)
+cfctrl <- cforest_control(ntree = 1000, replace = F, fraction = 0.632, mtry=2)
 nrbRf <- cforest(NRB_binary ~ ., data=chk2,
-	controls = cforest_control(mtry=2))
-sum(diag(table(chk2$NRB_binary,predict(nrbRf))))/dim(chk2)[1]
+	controls = cfctrl)
+sum(diag(table(chk2$NRB_binary,predict(nrbRf, OOB=T))))/dim(chk2)[1]
 varimp(nrbRf)
 chk3 <- split(chk2, chk2$NRB_binary)
 ynam <- names(chk2)[-1]
